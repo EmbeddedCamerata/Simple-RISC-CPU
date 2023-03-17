@@ -1,5 +1,3 @@
-`timescale 1ns/1ns
-
 module alu (
     input               clk,
     input               rst_n,
@@ -7,14 +5,11 @@ module alu (
     input       [2:0]   opcode,
     input       [7:0]   data,
     input       [7:0]   acc_out,
-    output wire [7:0]   alu_out,
+    output reg  [7:0]   alu_out,
     output wire         zero
 );
-    
-    reg [7:0] alu_out_r;
-    
-    assign alu_out = alu_out_r;
-    assign zero = (acc_out === 8'h00);  // ===, all the same
+
+    assign zero = (acc_out === 8'h00);
 
     localparam HLT  = 3'b000;
     localparam SKZ  = 3'b001;
@@ -27,22 +22,22 @@ module alu (
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
-            alu_out_r <= 8'h00;
-        else if(alu_ena) begin
-            case(opcode)
-                HLT:    begin alu_out_r <= acc_out; end
-                SKZ:    begin alu_out_r <= acc_out; end
-                ADD:    begin alu_out_r <= data + acc_out; end
-                ANDD:   begin alu_out_r <= data & acc_out; end
-                XORR:   begin alu_out_r <= data ^ acc_out; end
-                LDA:    begin alu_out_r <= data; end
-                STO:    begin alu_out_r <= acc_out; end
-                JMP:    begin alu_out_r <= acc_out; end
-                default: begin alu_out_r <= 8'h00; end
+            alu_out <= 8'h00;
+        else if (alu_ena) begin
+            casex (opcode)
+                HLT:    alu_out <= acc_out;
+                SKZ:    alu_out <= acc_out;
+                ADD:    alu_out <= data + acc_out;
+                ANDD:   alu_out <= data & acc_out;
+                XORR:   alu_out <= data ^ acc_out;
+                LDA:    alu_out <= data;
+                STO:    alu_out <= acc_out;
+                JMP:    alu_out <= acc_out;
+                default:alu_out <= 8'h00;
             endcase
         end
         else begin
-            alu_out_r <= alu_out_r;
+            alu_out <= alu_out;
         end
     end
 

@@ -1,5 +1,3 @@
-`timescale 1ns/1ns
-
 module sram(
     inout [7:0]     data,
     input [10:0]    addr,
@@ -8,7 +6,7 @@ module sram(
     input           ena
 );
 
-    reg [7:0] ram [11'h7ff:0];
+    reg [7:0] ram[11'h7ff:0];
 
     assign data = (rd && ena) ? ram[addr] : 8'hzz;
 
