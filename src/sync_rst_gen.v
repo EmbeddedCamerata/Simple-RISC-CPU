@@ -3,11 +3,10 @@
 module sync_rst_gen(
     input       sys_clk,
     input       rst_n,
-    output wire sync_rst_n
+    output reg  sync_rst_n
 );
 
     reg sync_rst_n1;
-    reg sync_rst_n;
 
     always @(posedge sys_clk or negedge rst_n) begin
         if (!rst_n)

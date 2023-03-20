@@ -1,4 +1,4 @@
-module acc (
+module acc(
     input               clk,
     input               rst_n,
     input               load_acc,

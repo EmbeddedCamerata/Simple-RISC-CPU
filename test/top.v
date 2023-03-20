@@ -1,19 +1,12 @@
-`include "time.v"
-//`include "test1.dat"
-//`include "test2.dat"
-//`include "test3.dat"
-//`include "test1.pro"
-//`include "test2.pro"
-//`include "test3.pro"
-
+//`include "time.v"
 `define PERIOD 100 // matches clk_gen.v
 
 module top;
     reg reset_req, clock;
     integer test;
-
-    reg  [(3*8):0]  mnemonic; //array that holds 3 8-bit ASCII characters
-    reg  [12:0]     PC_addr,IR_addr;
+    
+    reg  [(3*8):0]  mnemonic; // array that holds 3 8-bit ASCII characters
+    reg  [12:0]     PC_addr, IR_addr;
     wire [7:0]      data;
     wire [12:0]     addr;
     wire            rd, wr, halt, ram_sel, rom_sel;
@@ -22,57 +15,58 @@ module top;
     wire [2:0]      opcode;
     wire            fetch;
     wire [12:0]     ir_addr, pc_addr;
+
     //----------------------------------------------------------------------------
     risc_cpu u_risc_cpu(
-        .sys_clk    (clock),
-        .rst_n      (sync_rst_n),
-        .halt       (halt),
-        .rd         (rd),
-        .wr         (wr),
-        .addr       (addr),
-        .data       (data),
-        .opcode     (opcode),
-        .fetch      (fetch),
-        .ir_addr    (ir_addr),
-        .pc_addr    (pc_addr)
+        .sys_clk    (clock      ),
+        .rst_n      (sync_rst_n ),
+        .halt       (halt       ),
+        .rd         (rd         ),
+        .wr         (wr         ),
+        .addr       (addr       ),
+        .data       (data       ),
+        .opcode     (opcode     ),
+        .fetch      (fetch      ),
+        .ir_addr    (ir_addr    ),
+        .pc_addr    (pc_addr    )
     );
                   
     sram u_sram(
-        .addr   (addr[10:0]),
-        .rd     (rd),
-        .wr     (wr),
-        .ena    (ram_sel),
-        .data   (data)
+        .addr   (addr[10:0] ),
+        .rd     (rd         ),
+        .wr     (wr         ),
+        .ena    (ram_sel    ),
+        .data   (data       )
     );
                             
     rom u_rom(
-        .addr   (addr),
-        .rd     (rd),
+        .addr   (addr   ),
+        .rd     (rd     ),
         .ena    (rom_sel),
-        .data   (data)
+        .data   (data   )
     );
                             
     addr_decode u_addr_decode(
-        .addr   (addr),
+        .addr   (addr   ),
         .ram_sel(ram_sel),
         .rom_sel(rom_sel)
     );
                             
     sync_rst_gen u_sync_rst_gen(
-        .sys_clk    (clock),
-        .rst_n      (reset_req),
-        .sync_rst_n (sync_rst_n)
+        .sys_clk    (clock      ),
+        .rst_n      (reset_req  ),
+        .sync_rst_n (sync_rst_n )
     );
     
     //------------------------------------------------------------------------------
     initial begin
-        $fsdbDumpfile("debussy.fsdb");
-        $fsdbDumpvars;
+        $dumpfile("./test/wave.fst");
+        $dumpvars(0, top);
     end
 
     initial begin
-        clock=1;
-        //display time in nanoseconds
+        clock = 1;
+        // display time in nanoseconds
         $timeformat(-9, 1, " ns", 12);
         display_debug_message;
         sys_reset;
@@ -81,7 +75,7 @@ module top;
         test2;
         $stop;
         test3;
-        $stop;
+        $finish;
     end
 
     task display_debug_message;
@@ -99,9 +93,9 @@ module top;
         begin
             test = 0;
             disable MONITOR;
-            $readmemb("../test1.pro", u_rom.rom);
+            $readmemb("./test/test1.pro", u_rom.rom);
             $display("rom loaded successfully!");
-            $readmemb("../test1.dat",u_sram.ram);
+            $readmemb("./test/test1.dat", u_sram.ram);
             $display("ram loaded successfully!");
             #1 test = 1;
             #14800;
@@ -113,9 +107,9 @@ module top;
         begin
             test = 0;
             disable MONITOR;
-            $readmemb("../test2.pro",u_rom.rom);
+            $readmemb("./test/test2.pro", u_rom.rom);
             $display("rom loaded successfully!");
-            $readmemb("../test2.dat",u_sram.ram);
+            $readmemb("./test/test2.dat", u_sram.ram);
             $display("ram loaded successfully!");
             #1 test = 2;
             #11600;
@@ -127,9 +121,9 @@ module top;
         begin
             test = 0;
             disable MONITOR;
-            $readmemb("../test3.pro",u_rom.rom);
+            $readmemb("./test/test3.pro", u_rom.rom);
             $display("rom loaded successfully!");
-            $readmemb("../test3.dat",u_sram.ram);
+            $readmemb("./test/test3.dat", u_sram.ram);
             $display("ram loaded successfully!");
             #1 test = 3;
             #94000;
@@ -145,8 +139,7 @@ module top;
         end
     endtask
 
-    always @(test)
-    begin: MONITOR
+    always @(test) begin: MONITOR
         case (test)
             1: begin //display results when running test 1
                 $display("\n*** RUNNING CPUtest1 - The Basic CPU Diagnostic Program ***");
@@ -156,9 +149,9 @@ module top;
                     @(u_risc_cpu.u_addr_mux.pc_addr)//fixed
                     if ((u_risc_cpu.u_addr_mux.pc_addr % 2 == 1) && (u_risc_cpu.u_addr_mux.fetch == 1))//fixed
                         begin
-                            #60 PC_addr <= u_risc_cpu.u_addr_mux.pc_addr -1 ;
+                            #60 PC_addr <= u_risc_cpu.u_addr_mux.pc_addr - 1;
                             IR_addr <= u_risc_cpu.u_addr_mux.ir_addr;
-                            #340 $strobe("%t %h %s %h %h",$time,PC_addr,mnemonic,IR_addr,data );//HERE DATA HAS BEEN CHANGEDT-CPU-M-REGISTER.DATA
+                            #340 $strobe("%t %h %s %h %h", $time, PC_addr, mnemonic, IR_addr, data);//HERE DATA HAS BEEN CHANGEDT-CPU-M-REGISTER.DATA
                     end
                 end
             end
@@ -173,8 +166,7 @@ module top;
                         begin
                         #60 PC_addr <= u_risc_cpu.u_addr_mux.pc_addr - 1;
                         IR_addr <= u_risc_cpu.u_addr_mux.ir_addr;
-                        #340 $strobe("%t %h %s %h %h", $time, PC_addr,
-                        mnemonic, IR_addr, data);
+                        #340 $strobe("%t %h %s %h %h", $time, PC_addr, mnemonic, IR_addr, data);
                     end
                 end
             end

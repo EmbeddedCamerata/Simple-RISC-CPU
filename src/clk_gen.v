@@ -49,16 +49,16 @@ module clk_gen(
         end
         else begin
             case (nstate)
-                IDLE:   fetch <= 1'b0; alu_ena <= 1'b0;
-                S1:     fetch <= 1'b1; alu_ena <= 1'b0;
-                S2:     fetch <= 1'b1; alu_ena <= 1'b0;
-                S3:     fetch <= 1'b1; alu_ena <= 1'b0;
-                S4:     fetch <= 1'b1; alu_ena <= 1'b0;
-                S5:     fetch <= 1'b0; alu_ena <= 1'b0;
-                S6:     fetch <= 1'b0; alu_ena <= 1'b1;
-                S7:     fetch <= 1'b0; alu_ena <= 1'b0;
-                S8:     fetch <= 1'b0; alu_ena <= 1'b0;
-                default:fetch <= fetch;alu_ena <= alu_ena;
+                IDLE:   begin fetch <= 1'b0; alu_ena <= 1'b0; end
+                S1:     begin fetch <= 1'b1; alu_ena <= 1'b0; end
+                S2:     begin fetch <= 1'b1; alu_ena <= 1'b0; end
+                S3:     begin fetch <= 1'b1; alu_ena <= 1'b0; end
+                S4:     begin fetch <= 1'b1; alu_ena <= 1'b0; end
+                S5:     begin fetch <= 1'b0; alu_ena <= 1'b0; end
+                S6:     begin fetch <= 1'b0; alu_ena <= 1'b1; end
+                S7:     begin fetch <= 1'b0; alu_ena <= 1'b0; end
+                S8:     begin fetch <= 1'b0; alu_ena <= 1'b0; end
+                default: ;
             endcase
         end
     end

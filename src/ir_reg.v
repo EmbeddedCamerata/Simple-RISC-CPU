@@ -13,8 +13,7 @@ module ir_reg(
     output reg  [12:0]  ir_addr
 );
 
-    reg cstate;
-    reg nstate;
+    reg cstate, nstate;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
@@ -25,7 +24,7 @@ module ir_reg(
 
     always @(*) begin
         case (cstate)
-            1'b0: if (load_ir) nstate = 1'b1 else nstate = 1'b0;
+            1'b0: if (load_ir) nstate = 1'b1; else nstate = 1'b0;
             1'b1: nstate = 1'b0;
             default: nstate = 1'b0;
         endcase
@@ -37,7 +36,7 @@ module ir_reg(
             ir_addr <= 13'b0_0000_0000_0000;
         end
         else begin
-            case(nstate)
+            case (nstate)
                 1'b1: if (load_ir) {opcode, ir_addr[12:8]} <= data;
                 1'b0: if (load_ir) {ir_addr[7:0]} <= data;
                 default: ;

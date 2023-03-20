@@ -14,11 +14,9 @@ module risc_cpu(
 );
 	// -----------------------------------------------------
 	// -----------------------------------------------------
-	wire [2:0] 	opcode;
-	wire 		clk, fetch, alu_ena;
+	wire 		clk, alu_ena;
 	wire 		statem_ena, zero, load_acc, load_pc, load_ir, incr_pc, datactrl_ena;
 	wire [7:0] 	alu_out, acc_out;
-	wire [12:0] pc_addr, ir_addr;
 
 	// clk_gen
 	clk_gen u_clk_gen(
@@ -37,7 +35,7 @@ module risc_cpu(
 		.statem_ena (statem_ena)
 	);
 
-	//statem        
+	// statem        
 	statem u_statem(
 		.clk            (clk         ),
 		.zero           (zero        ),
@@ -53,7 +51,7 @@ module risc_cpu(
 		.datactrl_ena   (datactrl_ena)
 	);
 
-	//acc    
+	// acc    
 	acc u_acc(
 		.load_acc   (load_acc  ) ,
 		.clk        (clk       ),
@@ -62,7 +60,7 @@ module risc_cpu(
 		.acc_out    (acc_out   )
 	);
 
-	//addr_mux
+	// addr_mux
 	addr_mux u_addr_mux(
 		.fetch    (fetch  ),
 		.pc_addr  (pc_addr),
@@ -70,7 +68,7 @@ module risc_cpu(
 		.addr     (addr   )
 	);
 
-	//alu
+	// alu
 	alu u_alu(
 		.clk      (clk     ),
 		.rst_n    (rst_n   ),
@@ -89,7 +87,7 @@ module risc_cpu(
 		.data           (data            )
 	);
 
-	//ir_reg
+	// ir_reg
 	ir_reg u_ir_reg(
 		.load_ir    (load_ir),    
 		.clk        (clk    ),    
@@ -99,7 +97,7 @@ module risc_cpu(
 		.ir_addr    (ir_addr)    
 	);
 
-	//pc
+	// pc
 	pc u_pc(
         .incr_pc    (incr_pc),    
         .load_pc    (load_pc),    

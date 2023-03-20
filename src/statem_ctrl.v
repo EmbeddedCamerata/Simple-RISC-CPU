@@ -2,10 +2,10 @@
  * State machine controller.
  */
 module statem_ctrl(
-    input clk,
-    input rst_n,
-    input fetch,
-    output reg statem_ena
+    input       clk,
+    input       rst_n,
+    input       fetch,
+    output reg  statem_ena
 );
 
     always @(posedge clk or negedge rst_n) begin

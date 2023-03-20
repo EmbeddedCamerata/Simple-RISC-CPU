@@ -1,4 +1,4 @@
-module alu (
+module alu(
     input               clk,
     input               rst_n,
     input               alu_ena,
@@ -11,14 +11,14 @@ module alu (
 
     assign zero = (acc_out === 8'h00);
 
-    localparam HLT  = 3'b000;
-    localparam SKZ  = 3'b001;
-    localparam ADD  = 3'b010;
-    localparam ANDD = 3'b011;
-    localparam XORR = 3'b100;
-    localparam LDA  = 3'b101;
-    localparam STO  = 3'b110;
-    localparam JMP  = 3'b111;
+    localparam HLT  = 3'b000;   // Halt for an entire CPU cycle(8 clk).
+    localparam SKZ  = 3'b001;   // If == 0 then skip one instruction.
+    localparam ADD  = 3'b010;   // ADD. Adds acc to the data of the memory or port. Result back to acc.
+    localparam ANDD = 3'b011;   // AND. Result back to acc.
+    localparam XORR = 3'b100;   // XOR. Result back to acc.
+    localparam LDA  = 3'b101;   // Read. Puts the data given in the address into the acc given in the instruction.
+    localparam STO  = 3'b110;   // Write. Puts the data of acc into the address given in the instruction.
+    localparam JMP  = 3'b111;   // Jump to the destination address.
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
@@ -36,9 +36,8 @@ module alu (
                 default:alu_out <= 8'h00;
             endcase
         end
-        else begin
+        else
             alu_out <= alu_out;
-        end
     end
 
 endmodule

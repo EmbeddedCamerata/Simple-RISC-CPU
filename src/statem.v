@@ -19,13 +19,15 @@
  * On cycle #5(S6):
  *      If opcode == ANDD/ADD/XORR, do ALU. If opcode == LDA, send
  *      data to accumulator by ALU.
- *      If opcode == SKZ, if acc == 0, PC +1. Otherwise, still.
- *      If opcode == JMP, stores the dst address.
- *      If opcode == STO, write the data in the dst address.
+ *      If opcode == SKZ, if the output of acc == 0(zero == 1), PC +1.
+ *      Otherwise, still.
+ *      If opcode == JMP, jump to the destination address.
+ *      If opcode == STO, write the data in the destination address.
  * On cycle #6(S7):
  *      NOP.
  * On cycle #7(S8):
- *      If opcode == SKZ and zero == 0
+ *      If opcode == SKZ and the output of acc == 0(zero == 1), PC +1
+ *      for skipping one instruction. Otherwise, still.
  */
 module statem(
     input               clk,
@@ -194,7 +196,7 @@ module statem(
                     end
                 end
                 
-                default:;
+                default: ;
             endcase
         end
     end

@@ -2,7 +2,7 @@
  * Provides the address of instuction for reading it.
  * Every instruction is of 2-bytes which needs two cycles.
  */
-module pc (
+module pc(
     input               rst_n,
     input               incr_pc,
     input               load_pc,
