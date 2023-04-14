@@ -1,5 +1,7 @@
 # Simple RISC CPU
 
+代码格式优化、一键编译仿真
+
 ## ⛓ Prerequisites
 
 1. 编译工具：[iverilog](https://github.com/gtkwave/gtkwave)
@@ -11,4 +13,4 @@
 bash ./test/test.sh
 ```
 
-将生成 `risc_cpu_test.vvp` 文件，并通过 `vvp` 运行仿真，波形文件将保存在 `./test/wave.fst` ，可通过gtkwave等程序查看。
+将生成 `risc_cpu_test.vvp` 文件在 `./test` 下，并通过  `vvp `运行仿真，波形文件将保存在 `./test/wave.fst` ，可通过gtkwave等程序查看。
