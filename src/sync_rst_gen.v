@@ -22,4 +22,4 @@ module sync_rst_gen(
             sync_rst_n <= sync_rst_n1;
     end
 
-endmodule 
+endmodule

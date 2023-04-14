@@ -34,7 +34,7 @@ module statem(
     input               zero,
     input               statem_ena,
     input       [2:0]   opcode,
-    output reg          rd, 
+    output reg          rd,
     output reg          load_ir,
     output reg          load_acc,
     output reg          load_pc,
@@ -50,9 +50,9 @@ module statem(
     localparam ANDD = 3'b011;
     localparam XORR = 3'b100;
     localparam LDA  = 3'b101;
-    localparam STO  = 3'b110; 
+    localparam STO  = 3'b110;
     localparam JMP  = 3'b111;
-                        
+
     localparam IDLE = 4'b0000;
     localparam S1   = 4'b0001;
     localparam S2   = 4'b0010;
@@ -62,7 +62,7 @@ module statem(
     localparam S6   = 4'b0110;
     localparam S7   = 4'b0111;
     localparam S8   = 4'b1000;
-            
+
     reg [3:0] cstate, nstate;
 
     always @(negedge clk or negedge statem_ena) begin
@@ -98,22 +98,22 @@ module statem(
                     {load_ir, load_acc, load_pc, rd} <= 4'b0000;
                     {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                 end
-                
+
                 S1: begin
                     {load_ir, load_acc, load_pc, rd} <= 4'b1001;
                     {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                 end
-                
+
                 S2: begin
                     {load_ir, load_acc, load_pc, rd} <= 4'b1001;
                     {wr, incr_pc, datactrl_ena, halt} <= 4'b0100;
                 end
-                
+
                 S3: begin
                     {load_ir, load_acc, load_pc, rd} <= 4'b0000;
                     {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                 end
-                
+
                 S4: begin
                     if (opcode == HLT) begin
                         {load_ir, load_acc, load_pc, rd} <= 4'b0000;
@@ -124,7 +124,7 @@ module statem(
                         {wr, incr_pc, datactrl_ena, halt} <= 4'b0100;
                     end
                 end
-                
+
                 S5: begin
                     if (opcode == JMP) begin
                         {load_ir, load_acc, load_pc, rd} <= 4'b0010;
@@ -144,7 +144,7 @@ module statem(
                         {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                     end
                 end
-                
+
                 S6: begin
                     if (opcode == JMP) begin
                         {load_ir, load_acc, load_pc, rd} <= 4'b0010;
@@ -161,14 +161,14 @@ module statem(
                     end
                     else if (opcode == SKZ && zero == 1'b1) begin
                         {load_ir, load_acc, load_pc, rd} <= 4'b0000;
-                        {wr, incr_pc, datactrl_ena, halt} <= 4'b0100;        
+                        {wr, incr_pc, datactrl_ena, halt} <= 4'b0100;
                     end
                     else begin
                         {load_ir, load_acc, load_pc, rd} <= 4'b0000;
                         {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                     end
                 end
-                
+
                 S7: begin
                     if (opcode == LDA || opcode == ANDD ||
                         opcode == ADD || opcode == XORR) begin
@@ -184,7 +184,7 @@ module statem(
                         {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                     end
                 end
-                
+
                 S8: begin
                     if (opcode == SKZ && zero == 1'b1) begin
                         {load_ir, load_acc, load_pc, rd} <= 4'b0000;
@@ -195,7 +195,7 @@ module statem(
                         {wr, incr_pc, datactrl_ena, halt} <= 4'b0000;
                     end
                 end
-                
+
                 default: ;
             endcase
         end

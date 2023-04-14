@@ -19,4 +19,4 @@ module pc(
             pc_addr <= pc_addr + 1'b1;
     end
 
-endmodule 
+endmodule

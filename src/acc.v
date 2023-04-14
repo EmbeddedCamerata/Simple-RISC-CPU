@@ -5,7 +5,7 @@ module acc(
     input       [7:0]   alu_out,
     output reg  [7:0]   acc_out
 );
-    
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             acc_out <= 8'h00;
@@ -15,4 +15,4 @@ module acc(
             acc_out <= acc_out;
     end
 
-endmodule 
+endmodule

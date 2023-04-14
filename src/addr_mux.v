@@ -18,4 +18,4 @@ module addr_mux(
             addr = ir_addr;
     end
 
-endmodule 
+endmodule

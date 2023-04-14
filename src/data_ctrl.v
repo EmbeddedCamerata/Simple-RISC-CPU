@@ -7,4 +7,4 @@ module data_ctrl(
     assign data = (datactrl_ena) ? alu_out : 8'hzz;
     // when ACC don't export data, the data bus is tri-state
 
-endmodule 
+endmodule

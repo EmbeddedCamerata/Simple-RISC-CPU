@@ -7,7 +7,7 @@ module clk_gen(
 );
 
     reg [3:0] cstate, nstate;
-            
+
     localparam IDLE = 4'b1000;
     localparam S1   = 4'b0000;
     localparam S2   = 4'b0001;
@@ -63,4 +63,4 @@ module clk_gen(
         end
     end
 
-endmodule 
+endmodule

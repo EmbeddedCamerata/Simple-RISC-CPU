@@ -1,10 +1,9 @@
-//`include "time.v"
 `define PERIOD 100 // matches clk_gen.v
 
 module top;
     reg reset_req, clock;
     integer test;
-    
+
     reg  [(3*8):0]  mnemonic; // array that holds 3 8-bit ASCII characters
     reg  [12:0]     PC_addr, IR_addr;
     wire [7:0]      data;
@@ -30,7 +29,7 @@ module top;
         .ir_addr    (ir_addr    ),
         .pc_addr    (pc_addr    )
     );
-                  
+
     sram u_sram(
         .addr   (addr[10:0] ),
         .rd     (rd         ),
@@ -38,26 +37,26 @@ module top;
         .ena    (ram_sel    ),
         .data   (data       )
     );
-                            
+
     rom u_rom(
         .addr   (addr   ),
         .rd     (rd     ),
         .ena    (rom_sel),
         .data   (data   )
     );
-                            
+
     addr_decode u_addr_decode(
         .addr   (addr   ),
         .ram_sel(ram_sel),
         .rom_sel(rom_sel)
     );
-                            
+
     sync_rst_gen u_sync_rst_gen(
         .sys_clk    (clock      ),
         .rst_n      (reset_req  ),
         .sync_rst_n (sync_rst_n )
     );
-    
+
     //------------------------------------------------------------------------------
     initial begin
         $dumpfile("./test/wave.fst");
@@ -149,13 +148,13 @@ module top;
                     @(u_risc_cpu.u_addr_mux.pc_addr)//fixed
                     if ((u_risc_cpu.u_addr_mux.pc_addr % 2 == 1) && (u_risc_cpu.u_addr_mux.fetch == 1))//fixed
                         begin
-                            #60 PC_addr <= u_risc_cpu.u_addr_mux.pc_addr - 1;
-                            IR_addr <= u_risc_cpu.u_addr_mux.ir_addr;
-                            #340 $strobe("%t %h %s %h %h", $time, PC_addr, mnemonic, IR_addr, data);//HERE DATA HAS BEEN CHANGEDT-CPU-M-REGISTER.DATA
+                        #60 PC_addr <= u_risc_cpu.u_addr_mux.pc_addr - 1;
+                        IR_addr <= u_risc_cpu.u_addr_mux.ir_addr;
+                        #340 $strobe("%t %h %s %h %h", $time, PC_addr, mnemonic, IR_addr, data);//HERE DATA HAS BEEN CHANGEDT-CPU-M-REGISTER.DATA
                     end
                 end
             end
-        
+
             2: begin
                 $display("\n*** RUNNING CPUtest2 - The Advanced CPU Diagnostic Program ***");
                 $display("\n TIME PC INSTR ADDR DATA ");
@@ -170,7 +169,7 @@ module top;
                     end
                 end
             end
-        
+
             3: begin
                 $display("\n*** RUNNING CPUtest3 - An Executable Program ***");
                 $display("*** This program should calculate the fibonacci ***");
@@ -184,9 +183,9 @@ module top;
             end
         endcase
     end
-    
+
     //----------------------------------------------------------------------------------
-    always @(posedge halt) //STOP when HALT instruction decoded
+    always @(posedge halt) // STOP when HALT instruction decoded
     begin
         #500
         $display("\n***********************************************************");
@@ -195,9 +194,9 @@ module top;
     end
 
     always #(`PERIOD/2) clock = ~clock;
-    
+
     always @(u_risc_cpu.u_alu.opcode) begin
-        //get an ASCII mnemonic for each opcode
+        // get an ASCII mnemonic for each opcode
         case (u_risc_cpu.u_alu.opcode)
             3'h0:    mnemonic = "HLT";
             3'h1:    mnemonic = "SKZ";
